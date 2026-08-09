@@ -3,7 +3,11 @@
     <body>
         <form action="/signup" method="POST">
             <input type="email" name="email" placeholder="Email" required>
-            <input type="password" name="password" placeholder="Enter your password" required>
+            <input type="password" name="password"
+             placeholder="Enter your password"
+             pattern="(?=.*[A-Z])(?=.*[0-9]).{8,}"
+             title="password must have at least 8 characters, one uppercase letter, and one number "
+             required>
             <button type="submit">Sign UP</button>            
         </form>   
     </body>
