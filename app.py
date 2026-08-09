@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, render_template, request
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
@@ -26,6 +26,20 @@ class Logs(db.Model):
     habit_id = db.Column(db.Integer, db.ForeignKey('habit.id'), nullable=False)
     date =  db.Column(db.Date, nullable=False)
     completion = db.Column(db.Boolean, nullable=False)
+
+@app.route('/signup', methods=['GET', 'POST'])
+def signup():
+    if request.method == 'POST':
+        email = request.form['email']
+        password = request.form['password']
+
+        new_user = User(email=email, password=password)
+        db.session.add(new_user)
+        db.session.commit()
+
+        return "Signup successful!"
+    return render_template('signup.html')
+    
 
 @app.route('/')
 def home():
