@@ -19,7 +19,7 @@ class Habit(db.Model):
     goal = db.Column(db.String(120), nullable=False)
     timing = db.Column(db.String(120), nullable=False)
     duration = db.Column(db.Integer, nullable=False)
-    emoji = db.Column(db.String(10), nullable=False)
+    emoji = db.Column(db.String(10), nullable=True)
     why_reason = db.Column(db.String(200), nullable=False)
 
 
@@ -60,6 +60,27 @@ def login():
             return "Invalid email or password"
 
     return render_template('login.html')
+
+@app.route('/add_habit', methods=['GET', 'POST'])
+def add_habit():
+    if 'user_id'  not in session:
+        return "please  log in first"
+
+    if request.method == 'POST':
+        new_habit = Habit(
+            user_id=session['user_id'],
+            name=request.form['name'],
+            goal=request.form['goal'],
+            timing=request.form['timing'],
+            duration=request.form['duration'],
+            emoji=request.form['emoji'],
+            why_reason=request.form['why_reason']
+        )
+        db.session.add(new_habit)
+        db.session.commit()
+
+        return "Habit added successfully!"
+    return render_template('add_habit.html')
 
 @app.route('/dashboard')
 def dashboard():
